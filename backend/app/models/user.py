@@ -16,3 +16,9 @@ class User(Base):
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     memberships = relationship("Membership", back_populates="user", cascade="all, delete-orphan")
+
+    @property
+    def organization_id(self):
+        if self.memberships:
+            return str(self.memberships[0].organization_id)
+        return None
