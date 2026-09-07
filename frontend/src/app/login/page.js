@@ -11,6 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
+import { Logo } from "@/components/ui/logo";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
@@ -62,9 +63,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-slate-100">
         <div>
-          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-2xl">S</span>
-          </div>
+          <Logo className="w-16 h-16 mx-auto mb-4 shadow-sm rounded-3xl" />
           <h2 className="mt-2 text-center text-3xl font-extrabold text-slate-900">
             Welcome back
           </h2>

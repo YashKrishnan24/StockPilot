@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Box, ShoppingCart, Truck, CheckCircle2, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { Logo } from "@/components/ui/logo";
 
 const fadeUpVariant = {
   hidden: { opacity: 0, y: 30 },
@@ -25,9 +26,7 @@ export default function LandingPage() {
       <header className="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-slate-100">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-slate-900 rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-[10px] leading-none">S</span>
-            </div>
+            <Logo className="w-8 h-8 shadow-sm rounded-xl" />
             <span className="font-semibold text-lg tracking-tight">StockPilot</span>
           </Link>
           <div className="flex items-center gap-6">
@@ -263,9 +262,7 @@ export default function LandingPage() {
       <footer className="py-12 border-t border-slate-100 bg-white">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 bg-slate-900 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-[9px] leading-none">S</span>
-            </div>
+            <Logo className="w-5 h-5 rounded-md" />
             <span className="font-semibold text-sm tracking-tight">StockPilot</span>
           </div>
           

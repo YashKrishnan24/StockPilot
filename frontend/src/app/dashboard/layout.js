@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { Logo } from "@/components/ui/logo";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -44,12 +45,10 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar */}
       <div className="w-64 bg-white border-r border-slate-200 flex flex-col">
         <div className="h-16 flex items-center px-6 border-b border-slate-200">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-lg">S</span>
-            </div>
+          <Link href="/" className="flex items-center gap-2">
+            <Logo className="w-8 h-8 shadow-sm rounded-xl" />
             <span className="font-semibold text-lg tracking-tight">StockPilot</span>
-          </div>
+          </Link>
         </div>
         
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
