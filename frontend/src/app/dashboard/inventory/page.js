@@ -71,6 +71,21 @@ export default function InventoryPage() {
     }
   });
 
+  const adjustMutation = useMutation({
+    mutationFn: async ({ id, quantity_change }) => {
+      const res = await api.post(`/products/${id}/adjust`, { quantity_change });
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
+      queryClient.invalidateQueries(["dashboardStats"]);
+      toast.success("Stock adjusted!");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.detail || "Failed to adjust stock.");
+    }
+  });
+
   if (isLoading) return <div className="animate-pulse space-y-4"><div className="h-10 bg-slate-200 rounded w-full"></div><div className="h-64 bg-slate-200 rounded w-full"></div></div>;
 
   return (
@@ -163,7 +178,25 @@ export default function InventoryPage() {
                     <div className="text-xs text-slate-500 mt-0.5">${product.unit_price.toFixed(2)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 font-mono">{product.sku}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{product.current_stock}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
+                    <div className="flex items-center gap-2">
+                      <button 
+                        onClick={() => adjustMutation.mutate({ id: product.id, quantity_change: -1 })}
+                        disabled={product.current_stock <= 0 || adjustMutation.isPending}
+                        className="w-6 h-6 flex items-center justify-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 disabled:opacity-50 transition-colors"
+                      >
+                        -
+                      </button>
+                      <span className="w-8 text-center">{product.current_stock}</span>
+                      <button 
+                        onClick={() => adjustMutation.mutate({ id: product.id, quantity_change: 1 })}
+                        disabled={adjustMutation.isPending}
+                        className="w-6 h-6 flex items-center justify-center rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 disabled:opacity-50 transition-colors"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {editingId === product.id ? (
                       <div className="flex items-center gap-2">

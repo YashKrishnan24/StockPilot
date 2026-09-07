@@ -6,6 +6,12 @@ from sqlalchemy import select
 from app.api import deps
 from app.models import User, Product, InventoryMovement, OrderItem, PurchaseOrderItem
 from app.schemas import ProductCreate, ProductUpdate, Product as ProductSchema
+from app.models.inventory_movement import MovementType
+from pydantic import BaseModel
+
+class StockAdjustment(BaseModel):
+    quantity_change: int
+    notes: str = "Manual Adjustment"
 
 router = APIRouter()
 
@@ -96,3 +102,30 @@ def delete_product(
     db.delete(product)
     db.commit()
     return {"success": True, "message": "Product deleted successfully"}
+
+@router.post("/{id}/adjust", response_model=ProductSchema)
+def adjust_stock(
+    *,
+    db: Session = Depends(deps.get_db),
+    id: str,
+    adjustment: StockAdjustment,
+    current_user: User = Depends(deps.get_current_active_user),
+) -> Any:
+    product = db.get(Product, id)
+    if not product or product.organization_id != current_user.organization_id:
+        raise HTTPException(status_code=404, detail="Product not found")
+        
+    product.current_stock += adjustment.quantity_change
+    
+    movement = InventoryMovement(
+        organization_id=current_user.organization_id,
+        product_id=product.id,
+        user_id=str(current_user.id),
+        quantity_change=adjustment.quantity_change,
+        movement_type=MovementType.ADJUSTMENT.value,
+        notes=adjustment.notes
+    )
+    db.add(movement)
+    db.commit()
+    db.refresh(product)
+    return product
