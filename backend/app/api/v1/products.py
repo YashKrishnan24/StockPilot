@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select
 
 from app.api import deps
-from app.models import User, Product
+from app.models import User, Product, InventoryMovement, OrderItem, PurchaseOrderItem
 from app.schemas import ProductCreate, ProductUpdate, Product as ProductSchema
 
 router = APIRouter()
@@ -69,3 +69,29 @@ def update_product(
     db.commit()
     db.refresh(product)
     return product
+
+@router.delete("/{id}", response_model=dict)
+def delete_product(
+    *,
+    db: Session = Depends(deps.get_db),
+    id: str,
+    current_user: User = Depends(deps.get_current_active_user),
+) -> Any:
+    product = db.get(Product, id)
+    if not product or product.organization_id != current_user.organization_id:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    # Check for linked history
+    movements = db.execute(select(InventoryMovement).where(InventoryMovement.product_id == id)).scalars().first()
+    orders = db.execute(select(OrderItem).where(OrderItem.product_id == id)).scalars().first()
+    pos = db.execute(select(PurchaseOrderItem).where(PurchaseOrderItem.product_id == id)).scalars().first()
+    
+    if movements or orders or pos:
+        raise HTTPException(
+            status_code=400, 
+            detail="Cannot delete product because it has existing inventory movements, sales orders, or purchase orders. Please mark it as inactive instead."
+        )
+        
+    db.delete(product)
+    db.commit()
+    return {"success": True, "message": "Product deleted successfully"}
