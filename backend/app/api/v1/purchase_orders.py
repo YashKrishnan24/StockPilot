@@ -79,7 +79,7 @@ def receive_po(
         movement = InventoryMovement(
             organization_id=current_user.organization_id,
             product_id=product.id,
-            user_id=current_user.id,
+            user_id=str(current_user.id),
             quantity_change=item.quantity,
             movement_type=MovementType.IN.value,
             reference_id=po.id,
