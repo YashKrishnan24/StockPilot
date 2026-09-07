@@ -35,11 +35,7 @@ def get_current_user(
             detail="Could not validate credentials",
         )
     
-    try:
-        user_id = UUID(token_data["sub"])
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid token subject")
-
+    user_id = token_data["sub"]
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
