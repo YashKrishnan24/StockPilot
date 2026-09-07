@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, String, Float, Integer, ForeignKey
+from sqlalchemy import Column, String, Float, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -22,6 +22,7 @@ class Product(Base):
     
     min_stock_level = Column(Integer, nullable=False, default=0)
     current_stock = Column(Integer, nullable=False, default=0)
+    is_active = Column(Boolean, default=True, nullable=False)
 
     # Relationships
     organization = relationship("Organization")

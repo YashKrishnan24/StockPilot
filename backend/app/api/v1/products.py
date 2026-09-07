@@ -16,8 +16,8 @@ def read_products(
     limit: int = 100,
     current_user: User = Depends(deps.get_current_active_user),
 ) -> Any:
-    # Ensure isolation by organization_id
-    stmt = select(Product).filter(Product.organization_id == current_user.organization_id).offset(skip).limit(limit)
+    # Ensure isolation by organization_id and only active products
+    stmt = select(Product).filter(Product.organization_id == current_user.organization_id, Product.is_active == True).offset(skip).limit(limit)
     products = db.execute(stmt).scalars().all()
     return products
 
@@ -87,10 +87,11 @@ def delete_product(
     pos = db.execute(select(PurchaseOrderItem).where(PurchaseOrderItem.product_id == id)).scalars().first()
     
     if movements or orders or pos:
-        raise HTTPException(
-            status_code=400, 
-            detail="Cannot delete product because it has existing inventory movements, sales orders, or purchase orders. Please mark it as inactive instead."
-        )
+        # Soft delete instead of raising error
+        product.is_active = False
+        db.add(product)
+        db.commit()
+        return {"success": True, "message": "Product marked as inactive because it has existing history."}
         
     db.delete(product)
     db.commit()

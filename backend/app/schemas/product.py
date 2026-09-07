@@ -10,6 +10,7 @@ class ProductBase(BaseModel):
     unit_price: float = 0.0
     cost_price: float = 0.0
     min_stock_level: int = 0
+    is_active: bool = True
 
 class ProductCreate(ProductBase):
     pass
