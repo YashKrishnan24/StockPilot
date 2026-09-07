@@ -3,8 +3,8 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from pydantic import ValidationError
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
-from uuid import UUID
 
 from app.core.config import settings
 from app.db.session import SessionLocal
