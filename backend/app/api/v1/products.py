@@ -39,6 +39,19 @@ def create_product(
         organization_id=current_user.organization_id
     )
     db.add(product)
+    db.flush() # flush to get product ID
+    
+    if product.current_stock > 0:
+        movement = InventoryMovement(
+            organization_id=current_user.organization_id,
+            product_id=product.id,
+            user_id=str(current_user.id),
+            quantity_change=product.current_stock,
+            movement_type=MovementType.IN.value,
+            notes="Initial Stock"
+        )
+        db.add(movement)
+        
     db.commit()
     db.refresh(product)
     return product

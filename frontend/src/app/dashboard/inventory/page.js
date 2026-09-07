@@ -124,6 +124,10 @@ export default function InventoryPage() {
                   <input placeholder="e.g. WM-01" className="w-full border p-2 rounded-lg text-sm" value={newProduct.sku} onChange={e => setNewProduct({...newProduct, sku: e.target.value})} />
                 </div>
                 <div>
+                  <label className="text-xs font-medium text-slate-500 mb-1 block">Initial Stock</label>
+                  <input type="number" className="w-full border p-2 rounded-lg text-sm" value={newProduct.current_stock === '' ? '' : newProduct.current_stock} onChange={e => setNewProduct({...newProduct, current_stock: e.target.value === '' ? '' : Number(e.target.value)})} />
+                </div>
+                <div>
                   <label className="text-xs font-medium text-slate-500 mb-1 block">Alert Threshold (Min Stock)</label>
                   <input type="number" className="w-full border p-2 rounded-lg text-sm" value={newProduct.min_stock_level === '' ? '' : newProduct.min_stock_level} onChange={e => setNewProduct({...newProduct, min_stock_level: e.target.value === '' ? '' : Number(e.target.value)})} />
                 </div>

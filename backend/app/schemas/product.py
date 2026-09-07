@@ -13,7 +13,7 @@ class ProductBase(BaseModel):
     is_active: bool = True
 
 class ProductCreate(ProductBase):
-    pass
+    current_stock: int = 0
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = None
