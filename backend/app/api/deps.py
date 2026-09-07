@@ -3,12 +3,12 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from pydantic import ValidationError
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
-from uuid import UUID
 
 from app.core.config import settings
 from app.db.session import SessionLocal
-from app import models, schemas
+from app import models
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")
 
@@ -35,11 +35,7 @@ def get_current_user(
             detail="Could not validate credentials",
         )
     
-    try:
-        user_id = UUID(token_data["sub"])
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid token subject")
-
+    user_id = token_data["sub"]
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
