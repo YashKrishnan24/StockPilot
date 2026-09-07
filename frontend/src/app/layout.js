@@ -17,6 +17,8 @@ export const metadata = {
   description: "Track stock, manage orders, coordinate suppliers, and understand your business from one intelligent workspace.",
 };
 
+import { Toaster } from "sonner";
+
 export default function RootLayout({ children }) {
   return (
     <html
@@ -25,6 +27,7 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col bg-white text-slate-900">
         <QueryProvider>{children}</QueryProvider>
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );

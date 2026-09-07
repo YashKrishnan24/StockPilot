@@ -6,6 +6,7 @@ import { CheckCircle, Plus, ShoppingCart } from "lucide-react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 export default function OrdersPage() {
   const queryClient = useQueryClient();
@@ -37,9 +38,10 @@ export default function OrdersPage() {
       queryClient.invalidateQueries(["orders"]);
       queryClient.invalidateQueries(["dashboardStats"]);
       queryClient.invalidateQueries(["products"]);
+      toast.success("Order fulfilled successfully!");
     },
     onError: (err) => {
-      alert(err.response?.data?.detail || "Failed to fulfill order.");
+      toast.error(err.response?.data?.detail || "Failed to fulfill order.");
     }
   });
 
@@ -65,6 +67,10 @@ export default function OrdersPage() {
       queryClient.invalidateQueries(["dashboardStats"]);
       setShowAddForm(false);
       setNewOrder({ customer_name: "", product_id: "", quantity: 1 });
+      toast.success("Order created successfully!");
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.detail || "Failed to create order.");
     }
   });
 

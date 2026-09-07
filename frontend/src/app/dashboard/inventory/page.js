@@ -6,6 +6,7 @@ import { Plus, Search, Trash2, Edit2, Check, X, AlertTriangle } from "lucide-rea
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 export default function InventoryPage() {
   const queryClient = useQueryClient();
@@ -32,6 +33,10 @@ export default function InventoryPage() {
       queryClient.invalidateQueries(["dashboardStats"]);
       setShowAddForm(false);
       setNewProduct({ name: "", sku: "", min_stock_level: 0, current_stock: 0, unit_price: 0, cost_price: 0 });
+      toast.success("Product created successfully!");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.detail || "Failed to create product.");
     }
   });
 
@@ -44,6 +49,10 @@ export default function InventoryPage() {
       queryClient.invalidateQueries(["products"]);
       queryClient.invalidateQueries(["dashboardStats"]);
       setEditingId(null);
+      toast.success("Threshold updated!");
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.detail || "Failed to update product.");
     }
   });
 
@@ -55,9 +64,10 @@ export default function InventoryPage() {
     onSuccess: () => {
       queryClient.invalidateQueries(["products"]);
       queryClient.invalidateQueries(["dashboardStats"]);
+      toast.success("Product deleted successfully!");
     },
     onError: (error) => {
-      alert(error.response?.data?.detail || "Failed to delete product.");
+      toast.error(error.response?.data?.detail || "Failed to delete product.");
     }
   });
 

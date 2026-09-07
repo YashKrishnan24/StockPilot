@@ -6,6 +6,7 @@ import { Download, Plus, Truck } from "lucide-react";
 import { api } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
 export default function ProcurementPage() {
   const queryClient = useQueryClient();
@@ -37,9 +38,10 @@ export default function ProcurementPage() {
       queryClient.invalidateQueries(["pos"]);
       queryClient.invalidateQueries(["dashboardStats"]);
       queryClient.invalidateQueries(["products"]);
+      toast.success("Purchase order received!");
     },
     onError: (err) => {
-      alert(err.response?.data?.detail || "Failed to receive PO.");
+      toast.error(err.response?.data?.detail || "Failed to receive PO.");
     }
   });
 
@@ -64,6 +66,10 @@ export default function ProcurementPage() {
       queryClient.invalidateQueries(["pos"]);
       setShowAddForm(false);
       setNewPO({ supplier_id: "supp_123", expected_date: "", product_id: "", quantity: 1 });
+      toast.success("Purchase order created!");
+    },
+    onError: (err) => {
+      toast.error(err.response?.data?.detail || "Failed to create PO.");
     }
   });
 
