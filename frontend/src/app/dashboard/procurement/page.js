@@ -110,7 +110,7 @@ export default function ProcurementPage() {
                 </div>
                 <div>
                   <label className="text-xs font-medium text-slate-500 mb-1 block">Quantity *</label>
-                  <input type="number" min="1" className="w-full border p-2 rounded-lg text-sm" value={newPO.quantity} onChange={e => setNewPO({...newPO, quantity: parseInt(e.target.value) || 1})} />
+                  <input type="number" min="1" className="w-full border p-2 rounded-lg text-sm" value={newPO.quantity === '' ? '' : newPO.quantity} onChange={e => setNewPO({...newPO, quantity: e.target.value === '' ? '' : Number(e.target.value)})} />
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-4">

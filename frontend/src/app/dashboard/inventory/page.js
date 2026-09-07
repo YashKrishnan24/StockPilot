@@ -100,15 +100,15 @@ export default function InventoryPage() {
                 </div>
                 <div>
                   <label className="text-xs font-medium text-slate-500 mb-1 block">Alert Threshold (Min Stock)</label>
-                  <input type="number" className="w-full border p-2 rounded-lg text-sm" value={newProduct.min_stock_level} onChange={e => setNewProduct({...newProduct, min_stock_level: parseInt(e.target.value) || 0})} />
+                  <input type="number" className="w-full border p-2 rounded-lg text-sm" value={newProduct.min_stock_level === '' ? '' : newProduct.min_stock_level} onChange={e => setNewProduct({...newProduct, min_stock_level: e.target.value === '' ? '' : Number(e.target.value)})} />
                 </div>
                 <div>
                   <label className="text-xs font-medium text-slate-500 mb-1 block">Selling Price ($)</label>
-                  <input type="number" step="0.01" className="w-full border p-2 rounded-lg text-sm" value={newProduct.unit_price} onChange={e => setNewProduct({...newProduct, unit_price: parseFloat(e.target.value) || 0})} />
+                  <input type="number" step="0.01" className="w-full border p-2 rounded-lg text-sm" value={newProduct.unit_price === '' ? '' : newProduct.unit_price} onChange={e => setNewProduct({...newProduct, unit_price: e.target.value === '' ? '' : Number(e.target.value)})} />
                 </div>
                 <div>
                   <label className="text-xs font-medium text-slate-500 mb-1 block">Cost Price ($)</label>
-                  <input type="number" step="0.01" className="w-full border p-2 rounded-lg text-sm" value={newProduct.cost_price} onChange={e => setNewProduct({...newProduct, cost_price: parseFloat(e.target.value) || 0})} />
+                  <input type="number" step="0.01" className="w-full border p-2 rounded-lg text-sm" value={newProduct.cost_price === '' ? '' : newProduct.cost_price} onChange={e => setNewProduct({...newProduct, cost_price: e.target.value === '' ? '' : Number(e.target.value)})} />
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-4">
@@ -160,8 +160,8 @@ export default function InventoryPage() {
                         <input 
                           type="number" 
                           className="w-20 border border-slate-300 rounded p-1 text-sm focus:outline-none focus:border-blue-500" 
-                          value={editValue} 
-                          onChange={(e) => setEditValue(parseInt(e.target.value) || 0)}
+                          value={editValue === '' ? '' : editValue} 
+                          onChange={(e) => setEditValue(e.target.value === '' ? '' : Number(e.target.value))}
                           autoFocus
                         />
                         <button onClick={() => updateMutation.mutate({ id: product.id, data: { min_stock_level: editValue } })} className="text-green-600 hover:bg-green-50 p-1 rounded">
